@@ -12,6 +12,7 @@ fn main() {
         "1a" => day1::day1a(file_path),
         "1b" => day1::day1b(file_path),
         "2a" => day2::day2a(file_path),
+        "2b" => day2::day2b(file_path),
         _ => println!("No valid day!"),
     }
 }
