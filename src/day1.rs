@@ -64,24 +64,20 @@ pub fn day1b(file_path: &String) {
                 let mut n1 = 0;
                 let mut n2 = 0;
                 for el in &numbers {
-                    let num = c.find(el.0);
-                    if num.is_some() {
-                        let a = num.unwrap();
-                        if a <= min_index {
-                            min_index = a;
+                    if let Some(num) = c.find(el.0){
+                        if num <= min_index {
+                            min_index = num;
                             n1 = el.1.clone();
                         }
                     }
-                    let num = c.rfind(el.0);
-                    if num.is_some() {
-                        let a = num.unwrap();
-                        if a >= max_index {
-                            max_index = a;
+                    if let Some(num) = c.rfind(el.0){
+                        if num >= max_index {
+                            max_index = num;
                             n2 = el.1.clone();
                         }
                     }
                 }
-                println!(" number: {}{}", n1, n2);
+                // println!(" number: {}{}", n1, n2);
                 res += 10*n1 + n2;
             }
         }
