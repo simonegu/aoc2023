@@ -1,6 +1,7 @@
 use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::Path;
+use std::collections::HashMap;
 
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
 where
@@ -24,6 +25,64 @@ pub fn day1a(file_path: &String) {
                 } else {
                     println!("size error");
                 }
+            }
+        }
+    }
+    println!("result {}", res);
+}
+
+
+pub fn day1b(file_path: &String) {
+    let numbers = HashMap::from([
+        ("1", 1),
+        ("2", 2),
+        ("3", 3),
+        ("4", 4),
+        ("5", 5),
+        ("6", 6),
+        ("7", 7),
+        ("8", 8),
+        ("9", 9),
+        ("one", 1),
+        ("two", 2),
+        ("three", 3),
+        ("four", 4),
+        ("five", 5),
+        ("six", 6),
+        ("seven", 7),
+        ("eight", 8),
+        ("nine", 9),
+    ]);
+    let mut res = 0;
+    if let Ok(lines) = read_lines(file_path) {
+        // Consumes the iterator, returns an (Optional) String
+        for line in lines {
+            if let Ok(c) = line {
+                // search for
+                let mut min_index = 100;
+                let mut max_index = 0;
+                let mut n1 = 0;
+                let mut n2 = 0;
+                for el in &numbers {
+                    let num = c.find(el.0);
+                    if num.is_some() {
+                        let a = num.unwrap();
+                        if a <= min_index {
+                            min_index = a;
+                            n1 = el.1.clone();
+                        }
+                    }
+                    let num = c.rfind(el.0);
+                    if num.is_some() {
+                        let a = num.unwrap();
+                        if a >= max_index {
+                            max_index = a;
+                            n2 = el.1.clone();
+                        }
+                    }
+                }
+                println!(" number: {}{}", n1, n2);
+                res += 10*n1 + n2;
             }
         }
     }
