@@ -1,5 +1,6 @@
 use std::env;
 mod day1;
+mod day2;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -10,6 +11,7 @@ fn main() {
     match day.as_str() {
         "1a" => day1::day1a(file_path),
         "1b" => day1::day1b(file_path),
+        "2a" => day2::day2a(file_path),
         _ => println!("No valid day!"),
     }
 }
