@@ -27,6 +27,7 @@ fn main() {
         "2a" => day2::day2a(lines),
         "2b" => day2::day2b(lines),
         "3a" => day3::day3a(lines),
+        "3b" => day3::day3b(lines),
         _ => println!("No valid day!"),
     }
 }

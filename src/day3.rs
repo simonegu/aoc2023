@@ -52,3 +52,45 @@ pub fn day3a(lines: io::Lines<io::BufReader<File>>){
     }
     println!("result {}", res);
 }
+
+pub fn day3b(lines: io::Lines<io::BufReader<File>>){
+    let mut res = 0;
+    let mut line_1: String = "".to_string();
+    let mut line_2: String = "".to_string();
+    let re_numbers = Regex::new(r"\d+").unwrap();
+    for line in lines {
+        if let Ok(c) = line {
+            let symbols_collections = ['*'];
+            // find special char index
+            let symbols: Vec<_> = line_1.match_indices(&symbols_collections).collect();
+            // find numbers and index...
+            let n1: Vec<_> = re_numbers.find_iter(&c).collect();
+            let n2: Vec<_> = re_numbers.find_iter(&line_1).collect();
+            let n3: Vec<_> = re_numbers.find_iter(&line_2).collect();
+            let numbers = concat([n3,n2,n1]);
+            for (uidx,_sym) in &symbols {
+                let mut gear_count = 0;
+                let mut gear_match = 0;
+                let idx: i32 = (*uidx) as i32;
+                for number in &numbers {
+                    let n_start: i32 = (*number).start() as i32;
+                    let n_end: i32 = (*number).end() as i32;
+                    if idx >= n_start-1 && idx <= n_end {
+                        gear_count += 1;
+                        if gear_count == 2 {
+                            println!("{}:{}", gear_match, (*number).as_str());
+                            res += gear_match * (*number).as_str().parse::<i32>().unwrap();
+                            break;
+                        } else {
+                            gear_match = (*number).as_str().parse::<i32>().unwrap();
+                        }
+                    }
+                }
+            }
+            // collect prev lines
+            line_2 = line_1;
+            line_1 = c;
+        }
+    }
+    println!("result {}", res);
+}
