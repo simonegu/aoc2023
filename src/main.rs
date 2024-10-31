@@ -5,6 +5,7 @@ use std::env;
 mod day1;
 mod day2;
 mod day3;
+mod day4;
 
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
 where
@@ -28,6 +29,7 @@ fn main() {
         "2b" => day2::day2b(lines),
         "3a" => day3::day3a(lines),
         "3b" => day3::day3b(lines),
+        "4a" => day4::day4a(lines),
         _ => println!("No valid day!"),
     }
 }
