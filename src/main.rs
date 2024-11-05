@@ -6,6 +6,7 @@ mod day1;
 mod day2;
 mod day3;
 mod day4;
+mod day5;
 
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
 where
@@ -31,6 +32,7 @@ fn main() {
         "3b" => day3::day3b(lines),
         "4a" => day4::day4a(lines),
         "4b" => day4::day4b(lines),
+        "5a" => day5::day5a(lines),
         _ => println!("No valid day!"),
     }
 }
