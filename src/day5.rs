@@ -100,5 +100,68 @@ pub fn day5a(mut lines: io::Lines<io::BufReader<File>>){
         res = cmp::min(res, curr);
     }
     println!("result {}", res);
+}
 
+fn seed_to_location(mappings: &HashMap<Maps, Vec<Mapping>>, seed: i64) -> i64 {
+    let mut curr = seed;
+    for i in Maps::VALUES {
+        if let Some(rules) = mappings.get(&i) {
+            for rule in rules {
+                if curr >= rule.source && curr < rule.source + rule.length {
+                    // mapping happening
+                    let inc = curr - rule.source;
+                    curr = rule.destination + inc;
+                    break;
+                }
+
+            }
+            // println!("{:?}: {}", i, curr);
+        }
+    }
+    curr
+}
+
+pub fn day5b(mut lines: io::Lines<io::BufReader<File>>){
+    let mut mappings = HashMap::new();
+    let first_line = lines.next().unwrap().unwrap();
+    let seeds_str: Vec<_> = first_line.split(":").collect();
+    let  mut seed_list: Vec<_> = seeds_str[1].split(" ").collect();
+    seed_list = seed_list[1..].to_vec();
+    let seeds: Vec<_> = seed_list.iter().map(|x| x.parse::<i64>().unwrap()).collect();
+    // println!("{:#?}", seeds);
+    let mut current_map = None;
+    for line in lines {
+        if let Ok(c) = line {
+            // println!("{}", c);
+            if c.find("map").is_some() {
+                // match entry..
+                let entry: Vec<_> = c.split(" ").collect();
+                current_map = strings_to_maps(entry[0]);
+            } else if c.find(char::is_numeric).is_some() {
+                // is a mapping instruction
+                let entries_str: Vec<_> = c.split(" ").collect();
+                let entries: Vec<_> = entries_str.iter().map(|x| x.parse::<i64>().unwrap()).collect();
+                let mapping = Mapping{source: entries[1], destination: entries[0],length: entries[2]};
+                if let Some(key) = current_map {
+                    mappings.entry(key).or_insert_with(Vec::new).push(mapping);
+                }
+
+            } else {
+                // is a carriage return ignore it
+            }
+        }
+    }
+    // println!("{:#?}", mappings);
+
+    let mut res = i64::MAX;
+    // loop through the seeds
+    for i in 0..seeds.len()/2 {
+        for seed in seeds[i*2]..seeds[i*2]+seeds[i*2+1] {
+            // println!("seed: {}", seed);
+            let curr = seed_to_location(&mappings, seed);
+            // println!("{}", curr);
+            res = cmp::min(res, curr);
+        }
+    }
+    println!("result {}", res);
 }
