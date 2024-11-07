@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::fs::File;
 use std::{cmp, i64, io};
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 struct Mapping {
     source: i64,
     destination: i64,
@@ -121,6 +121,15 @@ fn seed_to_location(mappings: &HashMap<Maps, Vec<Mapping>>, seed: i64) -> i64 {
     curr
 }
 
+fn seeds_batch(res: &mut i64, mappings: &HashMap<Maps, Vec<Mapping>>, seed_start: i64, seed_length: i64) {
+    for seed in seed_start..seed_start+seed_length {
+        // println!("seed: {}", seed);
+        let curr = seed_to_location(&mappings, seed);
+        // println!("{}", curr);
+        *res = cmp::min(*res, curr);
+    }
+}
+
 pub fn day5b(mut lines: io::Lines<io::BufReader<File>>){
     let mut mappings = HashMap::new();
     let first_line = lines.next().unwrap().unwrap();
@@ -152,16 +161,25 @@ pub fn day5b(mut lines: io::Lines<io::BufReader<File>>){
         }
     }
     // println!("{:#?}", mappings);
-
-    let mut res = i64::MAX;
-    // loop through the seeds
-    for i in 0..seeds.len()/2 {
-        for seed in seeds[i*2]..seeds[i*2]+seeds[i*2+1] {
-            // println!("seed: {}", seed);
-            let curr = seed_to_location(&mappings, seed);
-            // println!("{}", curr);
-            res = cmp::min(res, curr);
-        }
+    let threads = seeds.len()/2;
+    println!("running on {} threads", threads);
+    let mut results: Vec<i64> = vec![i64::MAX;threads];
+    let mappings_vec = vec![mappings.clone(); threads];
+    {
+        let threads_results: Vec<_> = results.chunks_mut(1).collect();
+        crossbeam::scope(|spawner| {
+            for (i, res) in threads_results.into_iter().enumerate() {
+                let seed_start = seeds[i*2];
+                let seed_length = seeds[i*2+1];
+                let map = &mappings_vec[i];
+                spawner.spawn(move |_| {
+                    seeds_batch(&mut res[0], map, seed_start, seed_length);
+                });
+            }
+        }).unwrap();
     }
-    println!("result {}", res);
+
+    // println!("{:#?}", results);
+    let min = results.iter().min().unwrap();
+    println!("result {}",min);
 }
