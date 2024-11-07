@@ -164,14 +164,13 @@ pub fn day5b(mut lines: io::Lines<io::BufReader<File>>){
     let threads = seeds.len()/2;
     println!("running on {} threads", threads);
     let mut results: Vec<i64> = vec![i64::MAX;threads];
-    let mappings_vec = vec![mappings.clone(); threads];
     {
         let threads_results: Vec<_> = results.chunks_mut(1).collect();
         crossbeam::scope(|spawner| {
             for (i, res) in threads_results.into_iter().enumerate() {
                 let seed_start = seeds[i*2];
                 let seed_length = seeds[i*2+1];
-                let map = &mappings_vec[i];
+                let map = &mappings;
                 spawner.spawn(move |_| {
                     seeds_batch(&mut res[0], map, seed_start, seed_length);
                 });
