@@ -1,9 +1,9 @@
-use std::fs::File;
-use std::io;
 use regex::Regex;
 use std::cmp;
+use std::fs::File;
+use std::io;
 
-pub fn day2a(lines: io::Lines<io::BufReader<File>>){
+pub fn day2a(lines: io::Lines<io::BufReader<File>>) {
     let red = 12;
     let green = 13;
     let blue = 14;
@@ -18,7 +18,12 @@ pub fn day2a(lines: io::Lines<io::BufReader<File>>){
             // split the string on the ;
             let game: Vec<&str> = c.split(":").collect();
             let game_captures = re_game.captures(game[0]).unwrap();
-            let game_num = game_captures.get(1).unwrap().as_str().parse::<i32>().unwrap_or_default();
+            let game_num = game_captures
+                .get(1)
+                .unwrap()
+                .as_str()
+                .parse::<i32>()
+                .unwrap_or_default();
 
             // extract blue, green and red numbers
             let mut add_game = true;
@@ -50,7 +55,7 @@ pub fn day2a(lines: io::Lines<io::BufReader<File>>){
     println!("result {}", res);
 }
 
-pub fn day2b(lines: io::Lines<io::BufReader<File>>){
+pub fn day2b(lines: io::Lines<io::BufReader<File>>) {
     let mut res = 0;
     let re_blue = Regex::new(r"(\d+) blue").unwrap();
     let re_green = Regex::new(r"(\d+) green").unwrap();
@@ -68,16 +73,25 @@ pub fn day2b(lines: io::Lines<io::BufReader<File>>){
             let sets = game[1].split(";");
             for set in sets {
                 if let Some(cap) = re_red.captures(set) {
-                    red_max = cmp::max(red_max, cap.get(1).unwrap().as_str().parse::<i32>().unwrap());
+                    red_max = cmp::max(
+                        red_max,
+                        cap.get(1).unwrap().as_str().parse::<i32>().unwrap(),
+                    );
                 }
                 if let Some(cap) = re_blue.captures(set) {
-                    blue_max = cmp::max(blue_max, cap.get(1).unwrap().as_str().parse::<i32>().unwrap());
+                    blue_max = cmp::max(
+                        blue_max,
+                        cap.get(1).unwrap().as_str().parse::<i32>().unwrap(),
+                    );
                 }
                 if let Some(cap) = re_green.captures(set) {
-                    green_max = cmp::max(green_max, cap.get(1).unwrap().as_str().parse::<i32>().unwrap());
+                    green_max = cmp::max(
+                        green_max,
+                        cap.get(1).unwrap().as_str().parse::<i32>().unwrap(),
+                    );
                 }
             }
-            res += red_max*blue_max*green_max;
+            res += red_max * blue_max * green_max;
         }
     }
     println!("result {}", res);

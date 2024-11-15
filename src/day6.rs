@@ -6,13 +6,28 @@ struct Race {
     distance: u64,
 }
 
-pub fn day6a(_lines: io::Lines<io::BufReader<File>>){
+pub fn day6a(_lines: io::Lines<io::BufReader<File>>) {
     let races = vec![
-        Race{time: 61677571, distance: 430103613071150},
-        // Race{time: 61, distance: 430},
-        // Race{time: 67, distance: 1036},
-        // Race{time: 75, distance: 1307},
-        // Race{time: 71, distance: 1150},
+        Race {
+            time: 61677571,
+            distance: 430103613071150,
+        },
+        // Race {
+        //     time: 61,
+        //     distance: 430,
+        // },
+        // Race {
+        //     time: 67,
+        //     distance: 1036,
+        // },
+        // Race {
+        //     time: 75,
+        //     distance: 1307,
+        // },
+        // Race {
+        //     time: 71,
+        //     distance: 1150,
+        // },
     ];
     // let re_numbers = Regex::new(r"\d+").unwrap();
     // for line in lines {
